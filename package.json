@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -k \"tsx watch server/index.ts\" \"vite\"",
+    "dev": "npm run build:server && concurrently -k \"tsc -w -p tsconfig.server.json\" \"node --watch dist/server/index.js\" \"vite\"",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "tsc -p tsconfig.server.json",

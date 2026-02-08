@@ -1,21 +1,24 @@
-import { Router } from 'express';
-import { z } from 'zod';
+import { Router } from "express";
+import { z } from "zod";
 
-import { aggregateScores } from '../analysis/scorer';
-import { buildAnalyzeResponse, generateSuggestions } from '../ai/suggestions';
+import { aggregateScores } from "../analysis/scorer";
+import { buildAnalyzeResponse, generateSuggestions } from "../ai/suggestions";
 import {
   extractExtensionId,
   scrapeChromeStoreListing,
-  validateChromeWebStoreUrl
-} from '../scraper/chromeStore';
-import type { AnalyzeResponse } from '../types';
+  validateChromeWebStoreUrl,
+} from "../scraper/chromeStore";
+import type { AnalyzeResponse } from "../types";
 
 const requestSchema = z.object({
-  url: z.string().min(1)
+  url: z.string().min(1),
 });
 
 const ONE_MINUTE = 60_000;
 const ONE_HOUR = 60 * ONE_MINUTE;
+const DEFAULT_REVIEWS_LIMIT = 200;
+const REVIEW_SCRAPE_DEBUG = process.env.REVIEW_SCRAPE_DEBUG === "1";
+const REVIEW_SCRAPE_DEBUG_DIR = process.env.REVIEW_SCRAPE_DEBUG_DIR;
 
 const rateLimitState = new Map<string, number[]>();
 const responseCache = new Map<
@@ -29,20 +32,20 @@ const responseCache = new Map<
 function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number,
-  errorMessage: string
+  errorMessage: string,
 ): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((_, reject) => {
       setTimeout(() => reject(new Error(errorMessage)), timeoutMs);
-    })
+    }),
   ]);
 }
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const timestamps = (rateLimitState.get(ip) || []).filter(
-    (time) => now - time < ONE_MINUTE
+    (time) => now - time < ONE_MINUTE,
   );
 
   if (timestamps.length >= 10) {
@@ -72,7 +75,7 @@ function getFromCache(cacheKey: string): AnalyzeResponse | null {
 function setInCache(cacheKey: string, response: AnalyzeResponse): void {
   responseCache.set(cacheKey, {
     expiresAt: Date.now() + ONE_HOUR,
-    response
+    response,
   });
 }
 
@@ -86,29 +89,49 @@ async function runAnalyze(url: string): Promise<AnalyzeResponse> {
   }
 
   const scraped = await withTimeout(
-    scrapeChromeStoreListing(url, { timeoutMs: 30_000 }),
+    scrapeChromeStoreListing(url, {
+      timeoutMs: 30_000,
+      reviewsLimit: DEFAULT_REVIEWS_LIMIT,
+      reviewDebug: REVIEW_SCRAPE_DEBUG,
+      reviewDebugDir: REVIEW_SCRAPE_DEBUG_DIR,
+    }),
     30_000,
-    'Scraping request timed out.'
+    "Scraping request timed out.",
+  );
+  console.log(
+    `[analyze] scrape-complete ${JSON.stringify({
+      url,
+      extensionId,
+      reviewsScraped: scraped.reviews.length,
+      competitorsScraped: scraped.competitors.length,
+    })}`,
   );
 
   const scores = aggregateScores(scraped);
   const suggestions = await withTimeout(
     generateSuggestions({ scraped, scores }),
     60_000,
-    'Suggestion generation timed out.'
+    "Suggestion generation timed out.",
   );
 
   const response = buildAnalyzeResponse(scraped, scores, suggestions);
+  console.log(
+    `[analyze] response-ready ${JSON.stringify({
+      extensionId,
+      reviewsInResponse: response.reviews.length,
+      overallScore: response.scores.overall,
+    })}`,
+  );
   setInCache(cacheKey, response);
   return response;
 }
 
 export const analyzeRouter = Router();
 
-analyzeRouter.post('/scrape', async (req, res) => {
+analyzeRouter.post("/scrape", async (req, res) => {
   const parsed = requestSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ error: 'Request body must include a URL.' });
+    return res.status(400).json({ error: "Request body must include a URL." });
   }
 
   const validation = validateChromeWebStoreUrl(parsed.data.url);
@@ -118,32 +141,39 @@ analyzeRouter.post('/scrape', async (req, res) => {
 
   try {
     const scraped = await withTimeout(
-      scrapeChromeStoreListing(parsed.data.url, { timeoutMs: 30_000 }),
+      scrapeChromeStoreListing(parsed.data.url, {
+        timeoutMs: 30_000,
+        reviewsLimit: DEFAULT_REVIEWS_LIMIT,
+        reviewDebug: REVIEW_SCRAPE_DEBUG,
+        reviewDebugDir: REVIEW_SCRAPE_DEBUG_DIR,
+      }),
       30_000,
-      'Scraping request timed out.'
+      "Scraping request timed out.",
     );
 
     return res.status(200).json(scraped);
   } catch (error: any) {
-    if (String(error?.message).toLowerCase().includes('timed out')) {
-      return res.status(504).json({ error: 'Scraping timed out.' });
+    if (String(error?.message).toLowerCase().includes("timed out")) {
+      return res.status(504).json({ error: "Scraping timed out." });
     }
 
     return res
       .status(500)
-      .json({ error: error?.message || 'Failed to scrape listing.' });
+      .json({ error: error?.message || "Failed to scrape listing." });
   }
 });
 
-analyzeRouter.post('/analyze', async (req, res) => {
+analyzeRouter.post("/analyze", async (req, res) => {
   const parsed = requestSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ error: 'Request body must include a URL.' });
+    return res.status(400).json({ error: "Request body must include a URL." });
   }
 
-  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  const ip = req.ip || req.socket.remoteAddress || "unknown";
   if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Rate limit exceeded. Try again in a minute.' });
+    return res
+      .status(429)
+      .json({ error: "Rate limit exceeded. Try again in a minute." });
   }
 
   const validation = validateChromeWebStoreUrl(parsed.data.url);
@@ -155,13 +185,13 @@ analyzeRouter.post('/analyze', async (req, res) => {
     const response = await withTimeout(
       runAnalyze(parsed.data.url),
       90_000,
-      'Full analysis timed out.'
+      "Full analysis timed out.",
     );
 
     return res.status(200).json(response);
   } catch (error: any) {
-    const message = String(error?.message || 'Unknown error');
-    if (message.toLowerCase().includes('timed out')) {
+    const message = String(error?.message || "Unknown error");
+    if (message.toLowerCase().includes("timed out")) {
       return res.status(504).json({ error: message });
     }
 

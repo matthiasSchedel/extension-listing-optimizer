@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { CompetitorTab } from "./components/CompetitorTab";
 import { CopyTab } from "./components/CopyTab";
 import { IssuesTab } from "./components/IssuesTab";
 import { LoadingState } from "./components/LoadingState";
@@ -19,13 +18,7 @@ const loadingSteps = [
   "Assembling dashboard",
 ];
 
-type TabId =
-  | "issues"
-  | "suggestions"
-  | "copy"
-  | "screenshots"
-  | "reviews"
-  | "comp";
+type TabId = "issues" | "suggestions" | "copy" | "screenshots" | "reviews";
 
 const tabs: Array<{ id: TabId; label: string }> = [
   { id: "issues", label: "Issues" },
@@ -33,7 +26,6 @@ const tabs: Array<{ id: TabId; label: string }> = [
   { id: "copy", label: "Copy" },
   { id: "screenshots", label: "Screenshots" },
   { id: "reviews", label: "Reviews" },
-  { id: "comp", label: "Competitors" },
 ];
 
 function isChromeStoreUrl(url: string): boolean {
@@ -197,7 +189,6 @@ export default function App() {
                   <ScreenshotTab data={data} />
                 ) : null}
                 {activeTab === "reviews" ? <ReviewsTab data={data} /> : null}
-                {activeTab === "comp" ? <CompetitorTab data={data} /> : null}
               </div>
             </section>
           </>

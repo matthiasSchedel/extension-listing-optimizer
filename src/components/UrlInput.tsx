@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent } from "react";
 
 interface UrlInputProps {
   value: string;
@@ -15,7 +15,7 @@ export function UrlInput({
   error,
   onChange,
   onSubmit,
-  onDismissError
+  onDismissError,
 }: UrlInputProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +29,7 @@ export function UrlInput({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="Paste Chrome Web Store URL..."
-          className="w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-sm outline-none transition focus:border-ocean focus:ring-2 focus:ring-ocean/20 dark:border-white/20 dark:bg-slate-950"
+          className="w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-sm text-ink placeholder:text-black/40 outline-none transition focus:border-ocean focus:ring-2 focus:ring-ocean/20 dark:border-white/20 dark:bg-slate-950 dark:text-white dark:placeholder:text-white/40"
           aria-label="Chrome Web Store URL"
         />
         <button
@@ -37,7 +37,7 @@ export function UrlInput({
           disabled={loading}
           className="rounded-xl bg-ink px-5 py-3 font-display text-sm text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 dark:bg-ember dark:hover:bg-orange-600"
         >
-          {loading ? 'Analyzing...' : 'Analyze'}
+          {loading ? "Analyzing..." : "Analyze"}
         </button>
       </form>
       {error ? (
