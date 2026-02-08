@@ -1,0 +1,43 @@
+{
+  "extension": {
+    "name": "Research Assistant",
+    "id": "cccccccccccccccccccccccccccccccc",
+    "version": "1.4.2",
+    "description": "Research Assistant helps collect and organize references quickly.\n\nUse it to capture sources, annotate pages, and export highlights for your team.",
+    "shortDescription": "Capture references, annotate pages, and export highlights for faster team research workflows in Chrome.",
+    "category": "Productivity",
+    "installs": "25,000+",
+    "rating": 4.3,
+    "ratingCount": 540,
+    "lastUpdated": "2025-11-11",
+    "size": "2.4MiB",
+    "developer": {
+      "name": "Research Labs",
+      "website": "https://research.example.com",
+      "email": "hello@research.example.com"
+    },
+    "permissions": ["storage", "activeTab", "scripting", "tabs"],
+    "supportedLanguages": ["English", "Spanish"],
+    "privacyPolicyUrl": "https://research.example.com/privacy",
+    "screenshots": [
+      { "url": "https://img.example.com/r1.png", "width": 1280, "height": 800 },
+      { "url": "https://img.example.com/r2.png", "width": 1280, "height": 800 },
+      { "url": "https://img.example.com/r3.png", "width": 1024, "height": 768 }
+    ],
+    "icon": "https://img.example.com/r-icon.png",
+    "promoTiles": {
+      "small": "https://img.example.com/r-small.png",
+      "large": null,
+      "marquee": null
+    }
+  },
+  "reviews": [
+    { "author": "Devon", "rating": 5, "text": "Great helper for writing reports.", "date": "2025-12-21", "developerReply": "Thanks." },
+    { "author": "Liam", "rating": 4, "text": "Helpful but needs better sync.", "date": "2025-12-11", "developerReply": null },
+    { "author": "Nina", "rating": 2, "text": "Sync bug appears often.", "date": "2025-11-29", "developerReply": "Working on it." }
+  ],
+  "competitors": [
+    { "name": "Collect Pro", "url": "https://chromewebstore.google.com/detail/cp/dddddddddddddddddddddddddddddddd", "rating": 4.6, "installs": "70,000+", "ratingCount": 2200, "screenshotCount": 6, "descriptionLength": 1200, "lastUpdated": "2026-01-03" },
+    { "name": "Notes Fast", "url": "https://chromewebstore.google.com/detail/nf/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "rating": 4.1, "installs": "40,000+", "ratingCount": 1000, "screenshotCount": 4, "descriptionLength": 850, "lastUpdated": "2025-10-05" }
+  ]
+}

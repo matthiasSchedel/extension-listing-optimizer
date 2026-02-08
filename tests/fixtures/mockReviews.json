@@ -1,0 +1,6 @@
+[
+  { "author": "A", "rating": 5, "text": "Great and helpful.", "date": "2026-01-01", "developerReply": "Thanks" },
+  { "author": "B", "rating": 1, "text": "Bug crash broken.", "date": "2026-01-02", "developerReply": null },
+  { "author": "C", "rating": 4, "text": "Useful for workflow.", "date": "2026-01-03", "developerReply": null },
+  { "author": "D", "rating": 2, "text": "Slow and bad.", "date": "2026-01-04", "developerReply": "Fixing" }
+]

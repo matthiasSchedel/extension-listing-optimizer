@@ -1,0 +1,85 @@
+{
+  "extension": {
+    "name": "Workflow Automation Pro",
+    "id": "abcdefghijklmnopqrstuvwxzyabcdef",
+    "version": "2.1.0",
+    "description": "Workflow Automation Pro helps teams automate repetitive browser tasks with clear templates, fast execution, and secure controls.\n\n- Save hours every week with one-click automations\n- Keep handoffs consistent with shared templates\n- Track outcomes with built-in reports\n\nUse Workflow Automation Pro for lead capture, QA checks, support triage, and recurring productivity tasks. The extension is designed for non-technical users and advanced operators alike. With strong defaults, reliable performance, and precise permission controls, teams can deploy confidently.\n\nBuilt for daily work, this extension reduces context switching and helps teams ship faster with fewer errors. Every action is visible, predictable, and easy to audit, making operations smoother over time.\n\nIt also supports shared workspace presets, collaborative rollout checklists, and governance controls that make enterprise adoption easier. Teams can standardize naming conventions, automate preflight checks, and prevent repetitive errors before they reach production workflows. By combining practical automation with clear interfaces, the extension shortens the path from idea to execution while preserving trust and data hygiene.",
+    "shortDescription": "Automate repetitive Chrome tasks, standardize workflows, and boost team productivity with secure templates and one-click execution.",
+    "category": "Productivity",
+    "installs": "100,000+",
+    "rating": 4.8,
+    "ratingCount": 6000,
+    "lastUpdated": "2026-01-01",
+    "size": "4.2MiB",
+    "developer": {
+      "name": "Ops Toolkit Inc.",
+      "website": "https://example.com",
+      "email": "support@example.com"
+    },
+    "permissions": ["storage", "activeTab", "scripting"],
+    "supportedLanguages": ["English", "German"],
+    "privacyPolicyUrl": "https://example.com/privacy",
+    "screenshots": [
+      { "url": "https://img.example.com/1.png", "width": 1280, "height": 800 },
+      { "url": "https://img.example.com/2.png", "width": 1280, "height": 800 },
+      { "url": "https://img.example.com/3.png", "width": 640, "height": 400 },
+      { "url": "https://img.example.com/4.png", "width": 1280, "height": 800 },
+      { "url": "https://img.example.com/5.png", "width": 1280, "height": 800 }
+    ],
+    "icon": "https://img.example.com/icon.png",
+    "promoTiles": {
+      "small": "https://img.example.com/small.png",
+      "large": "https://img.example.com/large.png",
+      "marquee": "https://img.example.com/marquee.png"
+    }
+  },
+  "reviews": [
+    {
+      "author": "Alice",
+      "rating": 5,
+      "text": "Great extension. Love the speed.",
+      "date": "2026-01-25",
+      "developerReply": "Thanks!"
+    },
+    {
+      "author": "Bob",
+      "rating": 5,
+      "text": "Excellent reliability and helpful support.",
+      "date": "2026-01-20",
+      "developerReply": "Appreciate it."
+    },
+    {
+      "author": "Cara",
+      "rating": 4,
+      "text": "Helpful for team workflow and automation.",
+      "date": "2026-01-18",
+      "developerReply": "Thanks for sharing."
+    },
+    {
+      "author": "Dan",
+      "rating": 5,
+      "text": "Perfect for repetitive tasks.",
+      "date": "2026-01-16",
+      "developerReply": null
+    },
+    {
+      "author": "Eve",
+      "rating": 5,
+      "text": "Awesome extension with great value.",
+      "date": "2026-01-14",
+      "developerReply": "Thank you."
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Competitor A",
+      "url": "https://chromewebstore.google.com/detail/a/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rating": 4.4,
+      "installs": "80,000+",
+      "ratingCount": 4200,
+      "screenshotCount": 4,
+      "descriptionLength": 900,
+      "lastUpdated": "2025-12-20"
+    }
+  ]
+}

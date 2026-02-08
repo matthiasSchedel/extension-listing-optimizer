@@ -1,0 +1,36 @@
+{
+  "extension": {
+    "name": "Quick Tool",
+    "id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "version": "0.1.0",
+    "description": "Simple helper.",
+    "shortDescription": "",
+    "category": "Tools",
+    "installs": "1,000+",
+    "rating": 2.9,
+    "ratingCount": 12,
+    "lastUpdated": "2024-01-01",
+    "size": "1MiB",
+    "developer": {
+      "name": "Solo Dev",
+      "website": null,
+      "email": null
+    },
+    "permissions": ["storage", "<all_urls>", "tabs", "history", "cookies", "contextMenus"],
+    "supportedLanguages": ["English"],
+    "privacyPolicyUrl": null,
+    "screenshots": [],
+    "icon": null,
+    "promoTiles": {
+      "small": null,
+      "large": null,
+      "marquee": null
+    }
+  },
+  "reviews": [
+    { "author": "User1", "rating": 1, "text": "Broken and slow.", "date": "2025-12-01", "developerReply": null },
+    { "author": "User2", "rating": 2, "text": "Bad issue and crash.", "date": "2025-10-12", "developerReply": null },
+    { "author": "User3", "rating": 3, "text": "Not good", "date": "2025-08-10", "developerReply": null }
+  ],
+  "competitors": []
+}
