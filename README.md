@@ -1,55 +1,72 @@
 # Chrome Listing Optimizer
 
-Chrome Listing Optimizer is a single-page app that analyzes a Chrome Web Store extension listing and returns a scored optimization report with AI suggestions.
+Chrome Listing Optimizer is a route-based analytics workspace for Chrome Web Store listings. It keeps the existing `POST /api/analyze` API flow and layers a premium, module-driven UI with explainable insights, confidence scoring, evidence traceability, and export-ready outputs.
 
-## Features
+## What Changed
 
-- Analyze a Chrome Web Store URL with a single request (`POST /api/analyze`)
-- Listing quality scoring across 4 dimensions:
+- Migrated from a single tabbed results page to a workspace model.
+- Added product-level routing and deep-linkable module pages.
+- Added shared derived-analysis utilities (`src/analysis/`) used by all modules.
+- Added confidence semantics and evidence drill-in across module tables.
+- Added CSV/JSON exports with metadata (`extensionId`, `generatedAt`).
+- Kept a compatibility route for legacy tabs at `/legacy`.
+
+## Core Features
+
+- Analyze one Chrome Web Store URL via `POST /api/analyze`.
+- Keep existing score dimensions intact:
   - Completeness
   - SEO & Discovery
   - Social Proof
   - Trust & Safety
-- Overall weighted score + grade
-- AI-generated optimization suggestions (Claude) with fallback if API key is not set
-- Review scraping pipeline targeting up to 200 reviews (if available):
-  - Opens the reviews section
-  - Scrolls to load more
-  - Parses review network responses
-  - Falls back to DOM parsing
-  - Deduplicates and returns first 200
-- In-memory protections:
-  - Rate limiting (10 requests/minute/IP)
+- Weighted overall score + grade.
+- AI suggestions via Anthropic Claude with fallback behavior when key is missing.
+- Review scrape pipeline (target up to 200 reviews when available).
+- In-memory API protections:
+  - 10 requests/minute/IP rate limit
   - 1-hour response cache by extension ID
-- Frontend dashboard tabs:
-  - Issues
-  - AI Suggestions
-  - Copy
-  - Screenshots
-  - Reviews
+- Workspace modules:
+  - Review Insights
+  - Conversion Driver
+  - Strengths & Weaknesses
+  - Product Improvements
+  - Image Audit
+  - Conversion Blockers
 
-## Current Scope Notes
+## Workspace Routes
 
-- Competitor extraction is currently disabled intentionally.
-- `competitors` is returned as an empty array for now.
+- `/products`
+- `/products/:extensionId/review-insights`
+- `/products/:extensionId/conversion-driver`
+- `/products/:extensionId/strengths-weaknesses`
+- `/products/:extensionId/product-improvements`
+- `/products/:extensionId/image-audit`
+- `/products/:extensionId/conversion-blockers`
+- `/legacy` (temporary compatibility view)
 
-## Tech Stack
+## Architecture Notes
 
-- Frontend: React + TypeScript + Vite + Tailwind CSS
-- Backend: Express + TypeScript
-- Scraping: Puppeteer
-- AI: Anthropic Claude API
-- Tests: Vitest + Playwright
+- `POST /api/analyze` response shape is unchanged to avoid breaking existing consumers.
+- New analytics fields are additive and client-derived in `src/analysis/viewModel.ts`.
+- Shared confidence framework: `src/analysis/confidence.ts`.
+- Shared evidence mapping + drill-in drawer used across modules.
+- Product context is persisted in local storage under:
+  - `chrome-listing-optimizer.workspace.v2`
+- UI design system primitives live in:
+  - `src/components/ui/`
+- Tokenized style system lives in:
+  - `src/styles/globals.css`
 
 ## Project Structure
 
-- `src/`: frontend app
-- `server/`: backend API, scraping, scoring, AI integration
-- `tests/`: unit/integration/e2e tests
+- `src/`: frontend app, workspace shell, routes, modules, UI primitives, derived analytics.
+- `server/`: backend API, scraping, scoring, AI integration.
+- `tests/`: unit/integration/app tests and Playwright e2e specs.
+- `prompts/`: transformation spec prompts used for implementation.
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create `.env` in project root:
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-...
@@ -61,8 +78,8 @@ REVIEW_SCRAPE_DEBUG=0
 ```
 
 Notes:
-- If `ANTHROPIC_API_KEY` is missing, the app still works and returns fallback suggestions.
-- Set `REVIEW_SCRAPE_DEBUG=1` to persist raw review scraping debug artifacts to disk.
+- Without `ANTHROPIC_API_KEY`, API still returns fallback suggestions.
+- Set `REVIEW_SCRAPE_DEBUG=1` to persist scrape debug artifacts.
 
 ## Install
 
@@ -70,16 +87,16 @@ Notes:
 npm install
 ```
 
-## Run (Development)
+## Development
 
 ```bash
 npm run dev
 ```
 
-This starts:
-- Vite frontend on `http://localhost:5173`
-- Express API on `http://localhost:3000`
-- Vite proxy forwards `/api/*` to backend
+Starts:
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3000`
+- Vite proxy forwards `/api/*` to backend.
 
 ## Build
 
@@ -88,8 +105,8 @@ npm run build
 ```
 
 Outputs:
-- Frontend build in `dist/`
-- Backend JS in `dist/server/`
+- Frontend: `dist/`
+- Backend JS: `dist/server/`
 
 ## Start (Production-style)
 
@@ -106,46 +123,28 @@ npm run start
 ### Analyze
 
 - `POST /api/analyze`
-- Body:
+- Request body:
 
 ```json
 { "url": "https://chromewebstore.google.com/detail/<slug>/<extension-id>" }
 ```
 
-Returns:
-- `extension`
-- `reviews` (up to 200 if available)
-- `competitors` (currently `[]`)
-- `scores`
-- `suggestions`
+- Response includes:
+  - `extension`
+  - `reviews` (up to 200 if available)
+  - `competitors` (currently `[]`)
+  - `scores`
+  - `suggestions`
 
 ### Scrape-only
 
 - `POST /api/scrape`
-- Same request body as analyze
-- Returns scraped data without full score+suggestion orchestration
-
-## Review Scrape Debug Logs
-
-The backend prints structured logs during scrape/analyze.  
-If `REVIEW_SCRAPE_DEBUG=1`, it also writes a JSON debug artifact that includes:
-- progress events
-- matched network review response metadata
-- raw response bodies (capped per payload size/count)
-
-Examples:
-- `[review-scrape] reviews-tab {...}`
-- `[review-scrape] scroll-progress {...}`
-- `[review-scrape] result {...}`
-- `[review-scrape] debug-file {"path":"..."}`
-- `[analyze] scrape-complete {...}`
-- `[analyze] response-ready {...}`
-
-This helps validate whether reviews are being loaded from network, DOM fallback, and final output counts.
+- Same request body as analyze.
+- Returns scraped data without scoring/suggestions orchestration.
 
 ## Testing
 
-Run all unit/integration tests:
+Run unit/integration/app tests:
 
 ```bash
 npm test
@@ -157,29 +156,40 @@ Run Playwright e2e:
 npm run test:e2e
 ```
 
-## Docker
-
-Build image:
+Run type checks:
 
 ```bash
-docker build -t chrome-listing-optimizer .
+npm run typecheck
 ```
 
-Run container:
+## Review Scrape Debug Logs
 
-```bash
-docker run --rm -p 3000:3000 --env PORT=3000 --env NODE_ENV=production --env ANTHROPIC_API_KEY=sk-ant-... chrome-listing-optimizer
-```
+When enabled (`REVIEW_SCRAPE_DEBUG=1`), backend emits structured logs and JSON artifacts:
+- progress events
+- matched review network response metadata
+- capped raw response payloads
+
+Example log lines:
+- `[review-scrape] reviews-tab {...}`
+- `[review-scrape] scroll-progress {...}`
+- `[review-scrape] result {...}`
+- `[review-scrape] debug-file {"path":"..."}`
+- `[analyze] scrape-complete {...}`
+- `[analyze] response-ready {...}`
+
+## Current Scope Notes
+
+- Competitor extraction remains intentionally disabled.
+- `competitors` is returned as an empty array.
 
 ## Troubleshooting
 
 - If `/api/analyze` returns few/no reviews:
-  - Check backend logs for `[review-scrape]` entries.
-  - Confirm the listing has publicly visible reviews.
-  - Try another extension listing to compare behavior.
+  - inspect `[review-scrape]` logs
+  - confirm listing has public reviews
+  - compare with another listing
 - If AI suggestions are generic:
-  - Verify `ANTHROPIC_API_KEY` is set and valid.
+  - verify `ANTHROPIC_API_KEY`
 - If frontend cannot hit API:
-  - Ensure backend is running on port `3000` and Vite proxy is active.
-
-## Test Sect
+  - confirm backend is running on `3000`
+  - confirm Vite proxy is active

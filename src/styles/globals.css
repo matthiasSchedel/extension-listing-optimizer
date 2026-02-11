@@ -5,43 +5,129 @@
 @tailwind utilities;
 
 :root {
+  --bg: #f2f3f5;
+  --surface: #ffffff;
+  --surface-soft: #f7f7f8;
+  --border: #d8dde3;
+  --text: #12171e;
+  --muted: #5f6875;
+
+  --good: #1f8d5a;
+  --good-bg: #e8f6ef;
+  --good-border: #b7e5cd;
+  --good-text: #166441;
+
+  --warn: #b57a20;
+  --warn-bg: #fff4e2;
+  --warn-border: #f0d5a8;
+  --warn-text: #7a5311;
+
+  --bad: #b43d3d;
+  --bad-bg: #fdecec;
+  --bad-border: #f3bdbd;
+  --bad-text: #842a2a;
+
+  --info: #245b9c;
+  --info-bg: #e9f2ff;
+  --info-border: #bad4f6;
+  --info-text: #1b4678;
+
+  --focus: #2e74c8;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --table-row-height: 52px;
+  --table-header-height: 44px;
+
   color-scheme: light;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
-  @apply bg-canvas text-ink font-body antialiased;
+  margin: 0;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--text);
+  background-color: var(--bg);
   background-image:
-    radial-gradient(circle at 10% 10%, rgba(16, 106, 156, 0.11), transparent 42%),
-    radial-gradient(circle at 80% 20%, rgba(233, 93, 56, 0.08), transparent 38%),
-    linear-gradient(180deg, #fdfcf8 0%, #f4f3ee 100%);
+    radial-gradient(circle at 8% 12%, rgba(20, 23, 30, 0.08), transparent 32%),
+    radial-gradient(circle at 90% 0%, rgba(102, 120, 148, 0.08), transparent 25%);
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.workspace-sidebar {
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.workspace-main {
   min-height: 100vh;
 }
 
-body.dark {
-  @apply text-slate-100;
-  background-image:
-    radial-gradient(circle at 5% 10%, rgba(24, 88, 125, 0.35), transparent 42%),
-    radial-gradient(circle at 90% 10%, rgba(194, 83, 42, 0.25), transparent 38%),
-    linear-gradient(180deg, #14181c 0%, #11161a 100%);
+@media (max-width: 980px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-sidebar {
+    min-height: 0;
+    position: static;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .card {
-  @apply rounded-2xl border border-black/10 bg-white/80 shadow-sm backdrop-blur;
-}
-
-body.dark .card {
-  @apply border-white/10 bg-slate-900/70;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
 }
 
 .rise-in {
-  animation: rise-in 450ms ease forwards;
+  animation: rise-in 280ms ease;
 }
 
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
