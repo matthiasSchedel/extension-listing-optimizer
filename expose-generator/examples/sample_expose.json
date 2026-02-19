@@ -1,0 +1,154 @@
+{
+  "brand": {
+    "name": "Immobilien Schmidt GmbH",
+    "logo": "./assets/logo.png",
+    "primary_color": "#1a365d",
+    "secondary_color": "#e2a93b",
+    "font_heading": "Montserrat",
+    "font_body": "Open Sans",
+    "contact": {
+      "name": "Max Schmidt",
+      "title": "Geschaftsfuhrer",
+      "phone": "+49 170 1234567",
+      "email": "max@schmidt-immo.de",
+      "photo": "./assets/agent.jpg"
+    }
+  },
+  "property": {
+    "title": "Exklusive 4-Zimmer-Wohnung mit Elbblick",
+    "subtitle": "Hamburg-HafenCity | Erstbezug 2024",
+    "description": "Lichtdurchflutete Wohnung im 8. OG mit hochwertiger Ausstattung und direktem Wasserblick.",
+    "price": "EUR 895.000",
+    "address": "Am Sandtorkai 42, 20457 Hamburg",
+    "living_area": "128 m2",
+    "rooms": "4 Zimmer",
+    "bedrooms": "3 Schlafzimmer",
+    "bathrooms": "2 Badezimmer",
+    "floor": "8. OG",
+    "year_built": "2024",
+    "heating": "Fussbodenheizung",
+    "energy_class": "A+",
+    "garage": "Tiefgaragenstellplatz",
+    "balcony": "Loggia, 12 m2",
+    "features": ["Aufzug", "Concierge", "Tiefgarage", "Fussbodenheizung", "Einbaukuche"],
+    "images": {
+      "hero": "./assets/hero.jpg",
+      "gallery": ["./assets/img1.jpg", "./assets/img2.jpg", "./assets/img3.jpg"],
+      "floor_plan": "./assets/grundriss.png",
+      "location_map": "./assets/lage.png"
+    },
+    "location": {
+      "description": "Die HafenCity verbindet urbanes Wohnen mit maritimem Flair und exzellenter Infrastruktur.",
+      "highlights": [
+        "Elbphilharmonie 5 Min.",
+        "U4 Uberseequartier 2 Min.",
+        "Schulen und Kitas im Quartier"
+      ]
+    }
+  },
+  "pages": [
+    {
+      "type": "cover",
+      "layout": {
+        "background_image": "property.images.hero",
+        "overlay": {
+          "position": "bottom-left",
+          "width": "50%",
+          "padding": "40px",
+          "background": "rgba(0,0,0,0.6)",
+          "elements": [
+            { "type": "text", "field": "property.title", "style": "heading" },
+            { "type": "text", "field": "property.subtitle", "style": "subheading" },
+            { "type": "text", "field": "property.price", "style": "price" },
+            { "type": "image", "field": "brand.logo", "max_height": "40px" }
+          ]
+        }
+      }
+    },
+    {
+      "type": "details",
+      "layout": {
+        "columns": 2,
+        "gap": "40px",
+        "left": {
+          "elements": [
+            { "type": "text", "field": "property.description", "style": "body" },
+            { "type": "feature_list", "field": "property.features", "style": "tags" }
+          ]
+        },
+        "right": {
+          "elements": [
+            {
+              "type": "data_table",
+              "style": "key_value",
+              "fields": [
+                { "label": "Wohnflache", "field": "property.living_area" },
+                { "label": "Zimmer", "field": "property.rooms" },
+                { "label": "Schlafzimmer", "field": "property.bedrooms" },
+                { "label": "Badezimmer", "field": "property.bathrooms" },
+                { "label": "Etage", "field": "property.floor" },
+                { "label": "Baujahr", "field": "property.year_built" },
+                { "label": "Heizung", "field": "property.heating" },
+                { "label": "Energieklasse", "field": "property.energy_class" },
+                { "label": "Stellplatz", "field": "property.garage" },
+                { "label": "Balkon/Loggia", "field": "property.balcony" }
+              ]
+            },
+            { "type": "image", "field": "property.images.gallery[0]", "fit": "cover", "height": "200px" }
+          ]
+        }
+      }
+    },
+    {
+      "type": "floor_plan",
+      "layout": {
+        "columns": 1,
+        "elements": [
+          { "type": "section_title", "text": "Grundriss", "style": "heading" },
+          { "type": "image", "field": "property.images.floor_plan", "fit": "contain", "max_height": "85%" }
+        ]
+      }
+    },
+    {
+      "type": "location",
+      "layout": {
+        "columns": 2,
+        "left": {
+          "elements": [
+            { "type": "section_title", "text": "Lage", "style": "heading" },
+            { "type": "text", "field": "property.location.description", "style": "body" },
+            { "type": "feature_list", "field": "property.location.highlights", "style": "bullets" }
+          ]
+        },
+        "right": {
+          "elements": [
+            { "type": "image", "field": "property.images.location_map", "fit": "cover" }
+          ]
+        }
+      }
+    },
+    {
+      "type": "contact",
+      "layout": {
+        "columns": 2,
+        "background_color": "#1a365d",
+        "text_color": "#ffffff",
+        "left": {
+          "elements": [
+            { "type": "section_title", "text": "Ihr Ansprechpartner", "style": "heading" },
+            { "type": "image", "field": "brand.contact.photo", "fit": "cover", "width": "180px", "height": "220px", "border_radius": "8px" },
+            { "type": "text", "field": "brand.contact.name", "style": "subheading" },
+            { "type": "text", "field": "brand.contact.title", "style": "body" }
+          ]
+        },
+        "right": {
+          "elements": [
+            { "type": "text", "field": "brand.contact.phone", "style": "body", "icon": "phone" },
+            { "type": "text", "field": "brand.contact.email", "style": "body", "icon": "email" },
+            { "type": "image", "field": "brand.logo", "max_height": "60px", "position": "bottom" }
+          ]
+        }
+      }
+    }
+  ]
+}

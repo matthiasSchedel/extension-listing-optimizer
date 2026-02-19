@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["brand", "property", "pages"],
+  "additionalProperties": false,
+  "properties": {
+    "brand": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "logo": {"type": "string"},
+        "primary_color": {"type": "string"},
+        "secondary_color": {"type": "string"},
+        "font_heading": {"type": "string"},
+        "font_body": {"type": "string"},
+        "contact": {
+          "type": "object",
+          "properties": {
+            "name": {"type": "string"},
+            "title": {"type": "string"},
+            "phone": {"type": "string"},
+            "email": {"type": "string"},
+            "photo": {"type": "string"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type", "layout"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["cover", "details", "floor_plan", "location", "contact"]
+          },
+          "layout": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
